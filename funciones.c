@@ -181,6 +181,7 @@ int verificar3VocalesConsecutivas(int elemento1, int elemento2, int elemento3)
 //Caso contrario, retorna -1.
 int verificar3LetrasConsecutivas(int elemento1, int elemento2, int elemento3)
 {
+	//if(elemento1 ==-1
 	//Se realiza la verificacion y se guarda en Resultado 1 2 y 3.
 	int resultado1 = verificarLetra(elemento1);
 	int resultado2 = verificarLetra(elemento2);
@@ -337,11 +338,11 @@ int aplicarFiltroPassword(lista Combinacion)
 	}	
 } 
 
-void Backtracking_AllPasswords(lista Alfabeto, lista combinacion, int pos, int * CantidadListas)
+void Backtracking_AllPasswords(FILE * ArchivoSalida, lista Alfabeto, lista combinacion, int pos, int * CantidadListas)
 {
 	int i=0;
-//	int bool_condiciones=aplicarFiltroPassword(combinacion);
-	if(pos <8 )
+	//Si la posicion a iterar es menor a 8 y la combinacion es valida o si la combinacion esta Vacia (pos =0)
+	if(pos <8)
 	{
 		
 		for(i=0;i< Alfabeto.fin;i++)
@@ -350,25 +351,22 @@ void Backtracking_AllPasswords(lista Alfabeto, lista combinacion, int pos, int *
 			//mostrar(combinacion);
 			//getchar();
 			
-			if(pos<combinacion.fin)
-			{
-				combinacion.arreglo[pos].elemento=Alfabeto.arreglo[i].elemento;
-			}
-			else
-			{
-				combinacion =  insertar(combinacion, Alfabeto.arreglo[i].elemento, pos);
-			}
+		
+			combinacion.arreglo[pos].elemento=Alfabeto.arreglo[i].elemento;
 			
-			Backtracking_AllPasswords(Alfabeto,combinacion,pos+1, CantidadListas);
-			continue;
+			if(aplicarFiltroPassword(combinacion)==1)
+			{
+				Backtracking_AllPasswords(ArchivoSalida, Alfabeto,combinacion,pos+1, CantidadListas);
+			}
+//			continue;
 		}
 	}
-	else if(aplicarFiltroPassword(combinacion))
+	else if(aplicarFiltroPassword(combinacion)==1)
 	{
 		
 		//printf("=%s=\n",combinacion);
 		//mostrar(combinacion);
-		printf("TE CAISTE\n");
+		//printf("TE CAISTE\n");
 		
 		
 	//	Resultado = appendLista(combinacion, Resultado, CantidadListas);
@@ -376,9 +374,12 @@ void Backtracking_AllPasswords(lista Alfabeto, lista combinacion, int pos, int *
 		
 		
 		//Se aumenta en uno la cantidad de elementos que posee esa lista
-		//* CantidadListas = *CantidadListas + 1; 
-		mostrar(combinacion);
-		getchar();
+		* CantidadListas = *CantidadListas + 1; 
+		//mostrar(combinacion);
+		fprintf(ArchivoSalida,"%d: ",*CantidadListas);
+		imprimirArchivoLista(ArchivoSalida,combinacion);
+
+		//getchar();
 		//Se asigna mAs memoria a la lista enlazada que contendrA las listas
 		//Resultado = (lista *) realloc(Resultado,*CantidadListas*sizeof(lista));
 		
@@ -387,6 +388,10 @@ void Backtracking_AllPasswords(lista Alfabeto, lista combinacion, int pos, int *
 		
 	}
 }
+
+
+
+
 
 
 
@@ -457,40 +462,22 @@ void LeerArchivo() //Funcion que se encarga de leer un archivo y dar la intrucci
 		
 		fclose(Entrada);	
 			
-		//lista * CombinacionesValidas;
-		//int * totalCombinaciones;
-		
-
-		//totalCombinaciones = malloc(sizeof(int));
-		
-		
-		
-		
-		//CombinacionesPosibles = fuerzaBrutaPassword(Caracteres,totalCombinaciones);
-		//mostrarListaEnlazada(CombinacionesPosibles,*totalCombinaciones);
-		
-		//printf("Cantidad de Listas que contiene Resultado: %d\n",*totalCombinaciones);
-		//mostrarListaEnlazada(CombinacionesPosibles, *totalCombinaciones);
-		
-		
-		
-		lista * CombinacionesValidas;
-		CombinacionesValidas = (lista *) malloc(sizeof(lista));
 		int * totalCombinacionesValidas=malloc(sizeof(int));
 		*totalCombinacionesValidas = 0;
 		lista Combinacion = crearLista();
+		Combinacion = append(Combinacion,' ');
+		Combinacion = append(Combinacion,' ');
+		Combinacion = append(Combinacion,' ');
+		Combinacion = append(Combinacion,' ');
+		Combinacion = append(Combinacion,' ');
+		Combinacion = append(Combinacion,' ');
+		Combinacion = append(Combinacion,' ');
+		Combinacion = append(Combinacion,' ');
 		
 		
-		Backtracking_AllPasswords(Caracteres, Combinacion, 0, totalCombinacionesValidas);
+		Backtracking_AllPasswords(Salida,Caracteres, Combinacion, 0, totalCombinacionesValidas);
 		
-		//CombinacionesValidas=aplicarFiltro(CombinacionesPosibles,totalCombinaciones,totalCombinacionesValidas);	
-		
-		
-
-		fprintf(Salida, "Se han obtenido %d Combinaciones Validas.\n",*totalCombinacionesValidas);
-		//mostrarListaEnlazada(CombinacionesValidas, *totalCombinacionesValidas);
-		//imprimirArchivoListaBidimensional(Salida,CombinacionesValidas,*totalCombinacionesValidas);
-		
+		printf("El programa ha finalizado de forma exitosa\nLas combinaciones vAlidas se encuentran en el archivo Salida.out alojado en la misma carpeta que el cOdigo.");
 		fclose(Salida);
 	
 		}
