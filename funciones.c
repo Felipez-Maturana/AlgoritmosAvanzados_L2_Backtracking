@@ -360,7 +360,7 @@ void Backtracking_AllPasswords(FILE * ArchivoSalida, lista Alfabeto, lista combi
 	}
 	else if(aplicarFiltroPassword(combinacion)==1)
 	{
-		* CantidadListas = *CantidadListas + 1; 
+		* CantidadListas = *CantidadListas + 1;
 
 		fprintf(ArchivoSalida,"%d: ",*CantidadListas);
 		imprimirArchivoLista(ArchivoSalida,combinacion);		
